@@ -1,0 +1,199 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
+
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+
+static def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") as Integer ?: 0
+}
+
+android {
+    compileSdkVersion Versions.androidCompileSdk
+
+    defaultConfig {
+        applicationId "uk.co.lung9182uk.trackdemo"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + getBuildNumber()
+        minSdkVersion Versions.androidMinSdk
+        targetSdkVersion Versions.androidTargetSdk
+
+        testInstrumentationRunner "uk.co.lung9182uk.trackdemo.TestRunner"
+        vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.pro')
+        }
+
+        debug {
+            versionNameSuffix " Debug"
+            testCoverageEnabled true
+            debuggable true
+        }
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        dexInProcess = false
+        javaMaxHeapSize "4g"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    // change default directory path to use kotlin folders
+    sourceSets {
+        main { res.srcDirs = ['src/main/res', 'src/test/resources/mockito-extensions'] }
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        def commonTestDir = 'src/commonTest/kotlin'
+        test {
+            java.srcDir commonTestDir
+        }
+        androidTest {
+            java.srcDir commonTestDir
+        }
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+    }
+}
+
+kapt {
+    generateStubs = true
+    correctErrorTypes = true
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
+    }
+}
+
+dependencies {
+
+    // App dependencies
+    implementation AppDependencies.androidSupportAnnotations
+    implementation AppDependencies.androidSupportAppCompatV7
+    implementation AppDependencies.androidSupportCardview
+    implementation AppDependencies.androidSupportConstraintLayout
+    implementation AppDependencies.androidSupportDesign
+    implementation AppDependencies.androidSupportRecyclerView
+    implementation AppDependencies.androidSupportV13
+
+    implementation AppDependencies.dagger
+    implementation AppDependencies.daggerSupport
+    implementation AppDependencies.glide
+    implementation AppDependencies.gson
+    implementation AppDependencies.javaxAnnotation
+    implementation AppDependencies.javaxInject
+    implementation AppDependencies.kotlin
+    implementation AppDependencies.okHttp
+    implementation AppDependencies.okHttpLogger
+    implementation AppDependencies.retrofit
+    implementation AppDependencies.retrofitAdapter
+    implementation AppDependencies.retrofitConverter
+    implementation AppDependencies.roomRuntime
+    implementation AppDependencies.roomRxJava
+    implementation AppDependencies.archCompiler
+    implementation AppDependencies.archExtensions
+    implementation AppDependencies.archRuntime
+    implementation AppDependencies.rxAndroid
+    implementation AppDependencies.rxJava
+    implementation AppDependencies.rxKotlin
+    implementation AppDependencies.stetho
+    implementation AppDependencies.stethoOkhttp3
+    implementation AppDependencies.timber
+    implementation AppDependencies.anko
+    implementation AppDependencies.firebaseCore
+    implementation AppDependencies.crashlytics
+    implementation AppDependencies.firebasePerfMon
+
+    debugImplementation AppDependencies.leakCanaryDebug
+    releaseImplementation AppDependencies.leakCanaryRelease
+
+    kapt AppDependencies.roomCompiler
+    kapt AppDependencies.daggerCompiler
+    kapt AppDependencies.daggerProcessor
+
+    compileOnly AppDependencies.glassfishAnnotation
+    implementation AppDependencies.simpleRecyclerView
+    implementation AppDependencies.simpleRecyclerViewKotlinEx
+
+    implementation AppDependencies.multidex
+    implementation AppDependencies.playServices
+
+    // Instrumentation test dependencies
+    androidTestImplementation TestDependencies.dexopener
+    androidTestImplementation TestDependencies.junit
+    androidTestImplementation TestDependencies.mockitoKotlin
+    androidTestImplementation TestDependencies.dexmakerMockito
+    androidTestImplementation(TestDependencies.espressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation(TestDependencies.androidRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation(TestDependencies.androidRules) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation(TestDependencies.espressoIntents) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation(TestDependencies.espressoContrib) {
+        exclude module: 'appcompat'
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-v4'
+        exclude module: 'support-v13'
+        exclude module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'design'
+    }
+    kaptAndroidTest AppDependencies.daggerCompiler
+
+    // Unit test dependencies
+    testImplementation TestDependencies.junit
+    testImplementation TestDependencies.kotlinJUnit
+    testImplementation TestDependencies.mockitoKotlin
+    testImplementation TestDependencies.assertj
+    testImplementation TestDependencies.robolectric
+    testImplementation TestDependencies.roomTesting
+
+    kaptTest AppDependencies.daggerCompiler
+
+}
+
+apply plugin: 'com.google.gms.google-services'
