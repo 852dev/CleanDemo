@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "768524674310",
+    "firebase_url": "https://lung9182uk-205017.firebaseio.com",
+    "project_id": "lung9182uk-205017",
+    "storage_bucket": "lung9182uk-205017.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768524674310:android:c8dd51337d9bb346",
+        "android_client_info": {
+          "package_name": "uk.co.lung9182uk.trackdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768524674310-ct1m6dqmnukg43umq2jtckk01b4afdcu.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "768524674310-ct1m6dqmnukg43umq2jtckk01b4afdcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6g6JZhCAmbuU3zkhbjz2_UPSdb-ciyHs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
