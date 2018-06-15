@@ -1,5 +1,5 @@
 
-# Track Demo
+# Clean Architecture Demo
 
 - [Clean Architecture](https://github.com/android10/Android-CleanArchitecture)
 - [Kotlin](https://kotlinlang.org/)
